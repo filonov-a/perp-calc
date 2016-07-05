@@ -1,0 +1,35 @@
+<!DOCTYPE html>                                                                                                                                  
+<html>                                                                                                                                           
+  <head><title>Perpetuum calculator</title>                                                                                                                                                    
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />                                                                          
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">                                                                                                             
+   <!-- WEBIX CSS -->                                                                                                                            
+    <link href="webix/webix.css" rel="stylesheet">                                                                                              
+    <link type="text/css" href="webix/skins/compact.css" rel="stylesheet">                                                                      
+    <link type="text/css" href="app.css" rel="stylesheet">                                                                                  
+   <!-- WEBIX  JS-->                                                                                                                             
+                                                                                                                                                 
+<script src="webix/webix_debug.js" ></script>
+<script src="base/data.js" ></script>                                                                                                   
+<script src="base/ammo.js" ></script>
+<script src="base/main.js"></script>                                                                                                      
+                                                                                                                                                 
+  </head>                                                                                                                                        
+<body>                                                                                                                                           
+<div id="toolbar"  class="main_menu">
+    Calc                                                                                                            
+</div>                                                                                                                                           
+<div id="workarea" class="workarea">                                                                                                             
+    <div id="price" ></div>                                                                                              
+    <div id="ammo" >
+        <div style="padding:10px">
+				<input type="number" name="rank" /><br/>
+				<input type="text" name="title" value="" placeholder="Book title" /><br/>
+				<input type="date" name="year" value="" placeholder="Year" /><br/><br/>
+				<input type="button" name="submit" value="Submit" onclick='$$("formView").save()'/>
+			</div>
+    </div>
+</div>                                                                                                                                           
+</body>                                                                                                                                          
+</html>                                                                                                                                          
+      
