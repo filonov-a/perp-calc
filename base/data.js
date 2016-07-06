@@ -1,4 +1,6 @@
-
+function to_json(s) {
+    return JSON.stringify(s, null, 2);
+}
 // ресурсы на партию в 1кк титана
 var productivity = 27753304 * 25 / 1000000;
 var price = {
@@ -53,3 +55,15 @@ var prodData = {
    }
 
 };
+/*
+var categories ={
+    'Патроны':[
+    {
+        name: "{}",   
+        quantity: 1000,
+        cost: 2520,
+        time: '1h',
+    }
+    ]
+}
+*/

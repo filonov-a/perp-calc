@@ -12,16 +12,18 @@
 <script src="webix/webix_debug.js" ></script>
 <script src="base/data.js" ></script>                                                                                                   
 <script src="base/ammo.js" ></script>
-<script src="base/main.js"></script>                                                                                                      
+<script src="base/gen.js"></script>                                                                                                      
                                                                                                                                                  
   </head>                                                                                                                                        
 <body>                                                                                                                                           
-<div id="toolbar"  class="main_menu">
-    Calc                                                                                                            
-</div>                                                                                                                                           
-<div id="workarea" class="workarea">                                                                                                             
-    <div id="price" ></div>
-    <div id="detail" ></div>
+<div id="workarea">
+    <pre>
+<script>
+     updatePrices();
+     var v = to_json(priceData);
+     document.write(v);
+</script>
+</pre>
 </div>                                                                                                                                           
 </body>                                                                                                                                          
 </html>                                                                                                                                          
