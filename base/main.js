@@ -11,15 +11,51 @@ function updatePrices() {
         priceData.push({ name: v, price: price[v] });
     }
 }
+function getMaterials(name, quantity) {
+    var arr = [];
+    var materials = prodData[name].material;
+    var k = 1;
+    var cost = 0;
+    if (prodData[name].type == 'base') {
+        k = productivity;
+    }
+    for (v in materials) {
+        // console.log("Found " + v + ':' + materials[v]);
+        var obj = { name: v, value: materials[v] * quantity * k, open: false };
+        if (prodData[v]) {
+            var data = getMaterials(v, materials[v] * quantity);
+            obj.data = data[0];
+            obj.cost = data[1];
+        }
+        if (!obj.cost) {
+            if (price[obj.name]) {
+                obj.cost = price[obj.name] * obj.value;
+            } else {
+                obj.cost = '???';
+            }
+        }
+        console.log("Cost " +name + " -> " + cost + " " + obj.cost);
+        cost += obj.cost;
+        arr.push(obj);
+    }
+    console.log("FinishCost " +name + " -> " + cost );
+    return [arr, cost];
+}
 function getData(e) {
     var name = e.name;
-    var arr=[];
+    var arr = [];
+    var cost = prodData[name].cost;
     arr.push({ name: 'Размер партии', value: e.num });
-    arr.push({ name: 'Цена производства', cost: prodData[name].cost });
-    for (v in prodData[name].material) {
-        // console.log("Price for " + v + ':' + price[v]);
-        arr.push({ name: v, value: prodData[name].material[v] });
+    arr.push({ name: 'Цена производства', cost: cost });
+    var data = getMaterials(name, 1);
+    var materials = data[0];
+    cost = data[1];
+    
+    for (v in materials) {
+        arr.push(materials[v]);
     }
+    //console.log("getData " + to_json(arr));
+    arr.push({ name: 'Итого', cost: cost ,value: cost/e.num});
     return arr;
 }
 
@@ -35,17 +71,20 @@ var info = to_json(categories);
 function initUI() {
     detailTable = webix.ui(
         {
-            view: "datatable",
+            view: "treetable",
             id: 'detailTable',
             autoheight: true,
-            width: 350,
+            width: 450,
             container: "detail",
             columns: [
-                { id: "name", header: "Наименование", width: 200 },
-                { id: "value", header: "", width: 150 },
+                {
+                    id: "name", header: "Наименование", width: 200,
+                    template: "{common.treetable()} #name#"
+                },
+                { id: "value", header: "Кол-во", width: 100 },
                 { id: "cost", header: "Цена", width: 150 },
             ],
-            
+
         }
     );
     var treetable = {
