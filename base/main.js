@@ -9,14 +9,13 @@ function recalcDetail() {
     table.eachRow(
         function (row) {
             var v = table.getItem(row);
-            //console.log(to_json(v));
+            console.log(to_json(v));
+            if (v.name == 'Цена производства') {
+                total['NIC'] = v.cost * quantity;
+            }
             if (v.open == false) {
-                if (total['NIC']) {
-                    total['NIC'] += v.cost * quantity;
-                } else {
-                    total['NIC'] = v.cost * quantity;
 
-                } if (total[v.name]) {
+                if (total[v.name]) {
                     total[v.name] += v.value * quantity;
                 } else {
                     total[v.name] = v.value * quantity;
