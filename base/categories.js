@@ -26,35 +26,3 @@ var categories = [
         ]
     },
 ];
-function recalcDetail() {
-    var table = $$('detailTable');
-    var total = {};
-    var quantity = $$('quantity').getValue();
-    table.eachRow(
-        function (row) {
-            var v = table.getItem(row);
-            //console.log(to_json(v));
-            if (v.open == false) {
-                if (total['NIC']) {
-                    total['NIC'] += v.cost * quantity;
-                } else {
-                    total['NIC'] = v.cost * quantity;
-
-                } if (total[v.name]) {
-                    total[v.name] += v.value * quantity;
-                } else {
-                    total[v.name] = v.value * quantity;
-                }
-
-            }
-        }
-    );
-    var result = [];
-    for (v in total) {
-        // console.log("Price for " + v + ':' + price[v]);
-        result.push({ name: v, value: total[v] });
-    }
-    $$('totalTable').clearAll();
-    $$('totalTable').define('data', result);
-    //console.log(to_json(result));
-}
