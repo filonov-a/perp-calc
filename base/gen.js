@@ -10,7 +10,7 @@ function updatePrices() {
         priceData.push({ name: v, price: price[v] });
     }
 }
-var categories=[];
+var categories = [];
 function updateCategories() {
     for (v in prodData) {
         // console.log("Price for " + v + ':' + price[v]);
@@ -35,12 +35,24 @@ function createCategories() {
     };
     //      console.log(to_json(cat));
     for (var v in cat) {
-        var o = { name: v, open:false ,data: cat[v] };
-        if(v == "Промышленные модули"){
-            o.open = true;
-        }
+        var o = { name: v, open: false, data: cat[v] };
+        /*
+                if(v == "Промышленные роботы"){
+                    o.open = true;
+                }
+        */
         categories.push(o);
-        
+
     };
 }
 createCategories();
+
+function to_json(s) {
+    return JSON.stringify(s, null, 2);
+}
+function to_number(x) {
+    var n = Math.floor(x);
+    return n.toFixed(0).replace(/./g, function (c, i, a) {
+        return i && c !== "." && ((a.length - i) % 3 === 0) ? ' ' + c : c;
+    });
+}

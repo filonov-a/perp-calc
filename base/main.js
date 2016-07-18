@@ -26,14 +26,14 @@ function recalcTotal() {
     );
     var result = [];
     for (v in total) {
-        result.push({ name: v, value: Math.floor(total[v]) });
+        result.push({ name: v, value: to_number(total[v]) });
     }
     $$('totalTable').clearAll();
     $$('totalTable').define('data', result);
 }
 function recalcDetail() {
     var itemName = $$('itemName').getValue();
-    console.log("Calc for item " + itemName);
+
     var table = $$('detailTable');
     table.clearAll();
     var baseItemMe = parseInt($$('me').getValue(), 10);
@@ -41,6 +41,15 @@ function recalcDetail() {
     var d = getData(itemName, quantity, baseItemMe);
     $$('detailTable').define('data', d);
     recalcTotal();
+    table.eachRow(
+        function (row) {
+            var v = table.getItem(row);
+            if(v.cost && v.cost != NaN){
+                v.costVisible = to_number(v.cost);
+                table.updateItem(row, v);
+            }
+        }
+    );
     table.refresh();
 }
 var priceData = [];
@@ -90,7 +99,7 @@ var detailTable = {
                         { id: "basevalue", header: "Баз. Кол-во", width: 100 },
                         { id: "me", header: "Эффект.", width: 100 },
                         { id: "value", header: "Кол-во", width: 100 },
-                        { id: "cost", header: "Цена", width: 150 },
+                        { id: "costVisible", header: "Цена", width: 150 },
                     ],
                     on: {
                         onAfterOpen: recalcTotal,
@@ -118,19 +127,19 @@ function getMaterials(name, quantity, baseItemMe) {
     var materials = prodData[name].material;
     var k = 1;
     var me = 0;
-    var cost = 0;
-    var obj;
+    var cost = prodData[name].cost || 0;
+
     me = getProductivityByName(name, baseItemMe);
     k = getEffByName(name, baseItemMe);
     //console.log("Eff " + name + " " + me + ' : ' + k);
     for (v in materials) {
         // console.log("Found " + v + ':' + materials[v]);
-         obj = {
+        var obj = {
             name: v,
             basevalue: Math.floor(materials[v] * quantity),
             value: Math.floor(materials[v] * quantity * k),
             open: false,
-            'me': me
+            'me': getProductivityByName(v, 0)
         };
         if (prodData[v]) {
             var data = getMaterials(v, materials[v] * quantity * k, 0);
@@ -146,7 +155,9 @@ function getMaterials(name, quantity, baseItemMe) {
         }
         //console.log("Price " + obj.name + " -> " +  price[obj.name]);
         //console.log("Cost " + name + "/" + obj.name + " -> " + cost + " " + obj.cost);
-        cost += obj.cost;
+        if (obj.cost != '???') {
+            cost += obj.cost;
+        }
         arr.push(obj);
     }
     //console.log("FinishCost " + name + " -> " + cost);
@@ -156,7 +167,7 @@ function getData(name, quantity, baseItemMe) {
     var arr = [];
     var item = prodData[name];
     var cost = item.cost;
-    if(item.num ){
+    if (item.num) {
         arr.push({ name: 'Размер партии', value: item.num });
     }
     arr.push({ name: 'Цена производства', cost: item.cost });
@@ -165,8 +176,8 @@ function getData(name, quantity, baseItemMe) {
     arr.push({ name: 'Эфф. Фабрики', me: getBaseProductivityByName(name, 0) });
     arr.push({
         name: 'Эфф. Итоговая',
-        basevalue: getEffByName(name,baseItemMe),
-        me:  baseME,
+        basevalue: getEffByName(name, baseItemMe),
+        me: baseME,
     });
     var data = getMaterials(name, quantity, baseItemMe);
     var materials = data[0];
@@ -178,8 +189,8 @@ function getData(name, quantity, baseItemMe) {
     //console.log("getData " + to_json(arr));
     arr.push({
         name: 'Итого',
-        cost: Math.floor(cost),
-        basevalue: Math.floor(cost / (prodData[name].num|| 1))
+        cost: cost,
+        basevalue: to_number(cost / (prodData[name].num || 1))
     });
     return arr;
 }
@@ -207,7 +218,7 @@ function initUI() {
                 var v = this.getItem(id.row);
                 //if (v.cost) {
                 webix.message(v.name);
-                console.log(to_json(v));
+                //console.log(to_json(v));
                 $$('itemName').setValue(v.name);
                 recalcDetail();
                 $$('tabView').setValue('detailView');
