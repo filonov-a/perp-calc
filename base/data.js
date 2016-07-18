@@ -2,8 +2,11 @@ function to_json(s) {
     return JSON.stringify(s, null, 2);
 }
 // ресурсы на партию в 1кк титана
-var productivity = 1.05;
+
 var price = {
+    'Эффективность переработки': 283,
+    'Эффективность производства': 253,
+    'Эффективность прототипирования': 253,
     'Сильгиум': 4,
     'Иментиум': 2,
     'Стермонит': 2.84,
@@ -23,15 +26,62 @@ var price = {
 
 };
 
+var productivity = {};
+/*productivity['base'] = (price['Эффективность переработки']);
+productivity['item'] = (price['Эффективность производства']);
+productivity['proto'] = (price['Эффективность прототипирования']);
+*/
+function getProductivity(cat,baseMe) {
+    if(!cat){
+        cat = 'item';
+    }
+    if(cat == 'item'){
+        
+        var v = productivity[cat]+baseMe;
+        console.log("Prod for "+cat +" "+v+ "/ "+baseMe+" "+to_json(productivity));
+        return v;
+    }
+    if (productivity[cat]) {
+        return productivity[cat];
+    }
+    return 0;
+}
+function getProductivityByName(name,baseMe) {
+    var o = prodData[ name].type;
+    var me = prodData[ name].me || 0;
+    return getProductivity(o,baseMe) + me;
+}
+function getBaseProductivityByName(name,baseMe) {
+    var o = prodData[ name].type;
+    return getProductivity(o,baseMe);
+}
+function eff(x) {
+    return 1 + (1 / ((x / 50) + 2));
+}
+
+function getEffByName(name,base) {
+    var x = getProductivityByName(name,base);
+    var k = 1;
+    if (prodData[ name].type == 'proto'){
+        k= 5;
+    }
+    if (prodData[ name].type == 'protoCorp'){
+        k= 10;
+    }
+    return k*eff(x);
+}
+
 var prodData = {
     'Титан': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Титановая руда': 75,
         },
     },
     'Аксиколин': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Ликвизит': 50,
             'Титановая руда': 25,
@@ -39,6 +89,7 @@ var prodData = {
     },
     'Флоботил': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Сильгиум': 50,
             'Ликвизит': 25,
@@ -47,6 +98,7 @@ var prodData = {
     },
     'Полинуклеит': {
         'type': 'base',
+        cat: 'Материалы',
         'material': {
             'Стермонит': 50,
             'Ликвизит': 25,
@@ -55,6 +107,7 @@ var prodData = {
     },
     'Полинитрокол': {
         'type': 'base',
+        cat: 'Материалы',
         'material': {
             'Иментиум': 50,
             'Ликвизит': 25,
@@ -63,6 +116,7 @@ var prodData = {
     },
     'Изопропентол': {
         'type': 'base',
+        cat: 'Материалы',
         'material': {
             'Сильгиум': 50,
             'Нефть': 25,
@@ -71,6 +125,7 @@ var prodData = {
     },
     'Пластеозин': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Нефть': 50,
             'Титановая руда': 50,
@@ -78,6 +133,7 @@ var prodData = {
     },
     'Криоперин': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Ликвизит': 25,
             'Нефть': 50,
@@ -85,6 +141,7 @@ var prodData = {
     },
     'Витрицил': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Сильгиум': 50,
             'Нефть': 25,
@@ -93,6 +150,7 @@ var prodData = {
     },
     'Эспитиум': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Ликвизит': 75,
             'Нефть': 50,
@@ -101,6 +159,7 @@ var prodData = {
     },
     'Метахропин': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Стермонит': 50,
             'Нефть': 25,
@@ -109,10 +168,38 @@ var prodData = {
     },
     'Прилумиум': {
         'type': 'base',
+        cat: 'Материалы',
         "material": {
             'Стермонит': 50,
             'Нефть': 25,
             'Триандус': 30,
+        },
+    },
+    'Бриочит': {
+        'type': 'base',
+        cat: 'Материалы',
+        "material": {
+            'Норалгис': 50,
+            'Титановая руда': 75,
+            'Эпритон': 50,
+        },
+    },
+    'Аллигиор': {
+        'type': 'base',
+        cat: 'Материалы',
+        "material": {
+            'Нефть': 50,
+            'Титановая руда': 75,
+            'Эпритон': 50,
+        },
+    },
+    'Гидробенол': {
+        'type': 'base',
+        cat: 'Материалы',
+        "material": {
+            'Ликвизит': 75,
+            'Титановая руда': 50,
+            'Эпритон': 50,
         },
     },
 };
