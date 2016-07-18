@@ -44,7 +44,7 @@ function recalcDetail() {
     table.eachRow(
         function (row) {
             var v = table.getItem(row);
-            if(v.cost && v.cost != NaN){
+            if (v.cost && v.cost != NaN) {
                 v.costVisible = to_number(v.cost);
                 table.updateItem(row, v);
             }
@@ -242,11 +242,16 @@ function initUI() {
                 header: "Базовые цены",
                 body: {
                     height: "300",
+                    id: "priceTable",
                     view: "datatable",
+                    editable: true,
                     columns: [
                         { id: "name", header: "Наименование", width: 200 },
-                        { id: "price", header: "Цена", width: 80 },
+                        { id: "price", header: "Цена", width: 150, editor: "text" },
                     ],
+                    on: {
+                        onAfterEditStop: editPrices,
+                    },
                     data: priceData
                 }
             },

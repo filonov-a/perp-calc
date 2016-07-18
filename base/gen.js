@@ -10,6 +10,17 @@ function updatePrices() {
         priceData.push({ name: v, price: price[v] });
     }
 }
+function editPrices() {
+    var table = $$('priceTable');
+    table.eachRow(
+        function (row) {
+            var v = table.getItem(row);
+            price[v.name]=parseInt(v.price,10);
+            //console.log(to_json(v));
+        }
+    );
+    updatePrices();
+}
 var categories = [];
 function updateCategories() {
     for (v in prodData) {
