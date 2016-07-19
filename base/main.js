@@ -205,10 +205,12 @@ function initUI() {
 
         columns: [
             {
-                id: "name", header: "Категория", width: 250,
+                id: "name", header: "Категория", width: 450,
                 template: "{common.treetable()} #name#"
             },
+            { id: "tier", header: "Уровень", width: 90 },
             { id: "cost", header: "Стоимость производства", width: 90 },
+            { id: "me", header: "Эфф", width: 80 },
             { id: "num", header: "Партия", width: 100 },
             { id: "time", header: "Время изготовления", width: 120 },
         ],

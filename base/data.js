@@ -1,35 +1,8 @@
 
-// ресурсы на партию в 1кк титана
 
-var price = {
-    'Эффективность переработки': 283,
-    'Эффективность производства': 253,
-    'Эффективность прототипирования': 253,
-    'Сильгиум': 4,
-    'Иментиум': 2,
-    'Стермонит': 2.84,
-    'Нефть': 0.49,
-    'Ликвизит': 1.2,
-    'Призмоцит': 5.35,
-    'Триандус': 3,
-    'Норалгис': 18,
-    'Гелиоптрис': 5,
-    'Титановая руда': 1.2,
-    'Эпритон': 15,
-    'Коликсиум': 800,
-    'Битый общий фрагмент': 19000,
-    'Рабочий общий фрагмент': 7900,
-    'Целый общий фрагмент': 8000,
-    'Битый фрагмент Пелистян': 1455,
-    'Рабочий фрагмент Пелистян': 11999,
-
-};
 
 var productivity = {};
-/*productivity['base'] = (price['Эффективность переработки']);
-productivity['item'] = (price['Эффективность производства']);
-productivity['proto'] = (price['Эффективность прототипирования']);
-*/
+
 function getProductivity(cat, baseMe) {
     if (!cat) {
         cat = 'item';
@@ -65,152 +38,98 @@ function getEffByName(name, base) {
     var x = getProductivityByName(name, base);
     var k = 1;
     if (prodData[name].type == 'proto') {
-        k = 5;
-    }
-    if (prodData[name].type == 'protoCorp') {
         k = 10;
+    }
+    if (prodData[name].type == 'protoOwn') {
+        k = 5;
     }
     return k * eff(x);
 }
 
-var prodData = {
-    'Титан': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Титановая руда': 75,
-        },
-    },
-    'Аксиколин': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Ликвизит': 50,
-            'Титановая руда': 25,
-        },
-    },
-    'Флоботил': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Сильгиум': 50,
-            'Ликвизит': 25,
-            'Триандус': 30,
-        },
-    },
-    'Полинуклеит': {
-        'type': 'base',
-        cat: 'Материалы',
-        'material': {
-            'Стермонит': 50,
-            'Ликвизит': 25,
-            'Призмоцит': 30,
+var priceData = [];
+function updatePrices() {
+    productivity['base'] = (price['Эффективность переработки']);
+    productivity['item'] = (price['Эффективность производства']);
+    productivity['proto'] = (price['Эффективность прототипирования']);
+    productivity['protoOwn'] = productivity['proto'];
+
+    for (v in price) {
+        // console.log("Price for " + v + ':' + price[v]);
+        priceData.push({ name: v, price: price[v] });
+    }
+}
+function editPrices() {
+    var table = $$('priceTable');
+    table.eachRow(
+        function (row) {
+            var v = table.getItem(row);
+            price[v.name] = parseInt(v.price, 10);
+            //console.log(to_json(v));
         }
-    },
-    'Полинитрокол': {
-        'type': 'base',
-        cat: 'Материалы',
-        'material': {
-            'Иментиум': 50,
-            'Ликвизит': 25,
-            'Гелиоптрис': 30,
+    );
+    updatePrices();
+}
+var categories = [];
+function updateCategories() {
+    for (v in prodData) {
+        // console.log("Price for " + v + ':' + price[v]);
+        priceData.push({ name: v, price: price[v] });
+    }
+}
+var categories = [];
+function createCategories() {
+    var cat = {};
+    for (var v in prodData) {
+        //console.log("Data for " + v );
+        if (!ownCT[v] && !(prodData[v].type == 'proto' && prodData[v].tier == 'П')) {
+            continue;
         }
-    },
-    'Изопропентол': {
-        'type': 'base',
-        cat: 'Материалы',
-        'material': {
-            'Сильгиум': 50,
-            'Нефть': 25,
-            'Триандус': 30,
+        if (ownCT[v]) {
+            prodData[v].cost = ownCT[v].cost || 0;
+            prodData[v].me = ownCT[v].me || 0;
         }
-    },
-    'Пластеозин': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Нефть': 50,
-            'Титановая руда': 50,
-        },
-    },
-    'Криоперин': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Ликвизит': 25,
-            'Нефть': 50,
-        },
-    },
-    'Витрицил': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Сильгиум': 50,
-            'Нефть': 25,
-            'Гелиоптрис': 30,
-        },
-    },
-    'Эспитиум': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Ликвизит': 75,
-            'Нефть': 50,
-            'Эпритон': 50,
-        },
-    },
-    'Метахропин': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Стермонит': 50,
-            'Нефть': 25,
-            'Призмоцит': 30,
-        },
-    },
-    'Прилумиум': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Стермонит': 50,
-            'Нефть': 25,
-            'Триандус': 30,
-        },
-    },
-    'Бриочит': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Норалгис': 50,
-            'Титановая руда': 75,
-            'Эпритон': 50,
-        },
-    },
-    'Аллигиор': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Нефть': 50,
-            'Титановая руда': 75,
-            'Эпритон': 50,
-        },
-    },
-    'Гидробенол': {
-        'type': 'base',
-        cat: 'Материалы',
-        "material": {
-            'Ликвизит': 75,
-            'Титановая руда': 50,
-            'Эпритон': 50,
-        },
-    },
-    'Бочилиум': {
-        type: 'base',
-        cat: 'Материалы',
-        "material": {
-            'Нефть': 100,
-            'Эпритон': 25,
-            'Коликсиум': 50,
-        },
-    },
-};
+        var newRec = {
+            name: v,
+            cost: prodData[v].cost,
+            num: prodData[v].num,
+            me: prodData[v].me,
+            tier: prodData[v].tier,
+            time: prodData[v].time
+        };
+        if (ownCT[v]) {
+            if (prodData[v].type == 'proto') {
+                prodData[v].type = 'protoOwn';
+                newRec.me = 'свой';
+            }
+        }
+        //console.log("Data for " + v + to_json(newRec));
+        var objCat = prodData[v].cat || 'Other';
+        if (!cat[objCat]) {
+            cat[objCat] = [];
+        }
+        cat[objCat].push(newRec);
+    };
+    //      console.log(to_json(cat));
+    for (var v in cat) {
+        var o = { name: v, open: false, data: cat[v] };
+        /*
+                if(v == "Промышленные роботы"){
+                    o.open = true;
+                }
+        */
+        categories.push(o);
+
+    };
+    categories.sort();
+}
+createCategories();
+
+function to_json(s) {
+    return JSON.stringify(s, null, 2);
+}
+function to_number(x) {
+    var n = Math.floor(x);
+    return n.toFixed(0).replace(/./g, function (c, i, a) {
+        return i && c !== "." && ((a.length - i) % 3 === 0) ? ' ' + c : c;
+    });
+}
