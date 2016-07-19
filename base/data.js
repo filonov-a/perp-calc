@@ -102,7 +102,11 @@ function createCategories() {
             if (prodData[v].type == 'proto') {
                 prodData[v].type = 'protoOwn';
                 newRec.me = 'свой';
-            }
+            } 
+        } else {
+            if (prodData[v].type == 'proto') {
+                newRec.me = 'корп';
+            }            
         }
         //console.log("Data for " + v + to_json(newRec));
         var objCat = prodData[v].cat || 'Other';
