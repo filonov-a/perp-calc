@@ -80,8 +80,10 @@ var categories = [];
 function createCategories() {
     var cat = {};
     for (var v in prodData) {
-        //console.log("Data for " + v );
-        if (!ownCT[v] && !(prodData[v].type == 'proto' && prodData[v].tier == 'П')) {
+        if (!ownCT[v] && prodData[v].type != 'proto' ){
+            continue;
+        }
+        if (prodData[v].type == 'proto' && prodData[v].tier != 'П') {
             continue;
         }
         if (ownCT[v]) {
