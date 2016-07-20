@@ -60,6 +60,11 @@ var ownCT = {
     "Средний HCL-лазер Tertzer": { me: 120 },
     "Стандартный лёгкий HCL-лазер": { me: 120 },
 
+    "Стандартный средний LCL-лазер": { me: 50, cost: 0, time: 0 },
+    "Средний LCL-лазер Thelotec-Grazier": { me: 50, cost: 0, time: 0 },
+    "Средний LCL-лазер Kauska Heatpin I": { me: 50, cost: 0, time: 0 },
+    "Средний LCL-лазер Thermodissector": { me: 50, cost: 0, time: 0 },
+
     "Аргано": { cost: 37650, me: 181, time: '03:29:10' },
     "Аргано (П)": { cost: 393228, time: '1д 12:24:36' },
 

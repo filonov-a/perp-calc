@@ -18,7 +18,7 @@ function subcatToCategory(subcat) {
         || subcat.indexOf("кассет") > 0
     ) {
         return "Расходники";
-    }    return "Оборудование";
+    } return "Оборудование";
 
 }
 function getProductivity(cat, baseMe) {
