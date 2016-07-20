@@ -103,11 +103,12 @@ function createCategories() {
             continue;
         }
         if (ownCT[v]) {
+            prodData[v].cost = ownCT[v].cost || 0;
             prodData[v].me = ownCT[v].me || 0;
         }
         var newRec = {
             name: v,
-            cost: '-',
+            cost: prodData[v].cost,
             num: prodData[v].num,
             me: prodData[v].me,
             tier: prodData[v].tier,

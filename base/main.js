@@ -53,7 +53,7 @@ function recalcDetail() {
     var priceTable = $$('catTable');
 
     var tableItem = priceTable.getItem(lastCalculatedRowId);
-    tableItem.cost = d[d.length -1].cost;
+    tableItem.rescost = d[d.length -1].cost;
     priceTable.updateItem(lastCalculatedRowId, tableItem);
     table.refresh();
 }
@@ -214,7 +214,8 @@ function initUI() {
                 template: "{common.treetable()} #name#"
             },
             { id: "tier", header: "Уровень", width: 90 },
-            { id: "cost", header: "Стоимость", width: 120 },
+            { id: "cost", header: "Цена пр-ва", width: 120 },
+            { id: "rescost", header: "Стоимость", width: 120 },
             { id: "me", header: "Эфф", width: 80 },
             { id: "num", header: "Партия", width: 100 },
             { id: "time", header: "Время изготовления", width: 120 },
