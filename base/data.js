@@ -2,7 +2,25 @@
 
 
 var productivity = {};
+function subcatToCategory(subcat) {
+    if (subcat.indexOf("атериал") > 0) {
+        return "Материалы";
+    }
+    if (subcat.indexOf("робот") > 0
+        || subcat.indexOf("мехи") > 0
+        || subcat.indexOf("Мехи") >= 0
+        || subcat.indexOf("глайд") >= 0
+    ) {
+        return "Роботы";
+    }
+    if (subcat.indexOf("патрон") > 0
+        || subcat.indexOf("ячейк") > 0
+        || subcat.indexOf("кассет") > 0
+    ) {
+        return "Расходники";
+    }    return "Оборудование";
 
+}
 function getProductivity(cat, baseMe) {
     if (!cat) {
         cat = 'item';
@@ -80,12 +98,15 @@ var categories = [];
 function createCategories() {
     var cat = {};
     for (var v in prodData) {
-        if (!ownCT[v] && prodData[v].type != 'proto' ){
+        if (!ownCT[v] && prodData[v].type != 'proto' && prodData[v].type != 'base') {
             continue;
         }
         if (prodData[v].type == 'proto' && prodData[v].tier != 'П') {
             continue;
         }
+        if (prodData[v].type == 'base' ) {
+            prodData[v].cost =0;
+        }        
         if (ownCT[v]) {
             prodData[v].cost = ownCT[v].cost || 0;
             prodData[v].me = ownCT[v].me || 0;
@@ -102,11 +123,11 @@ function createCategories() {
             if (prodData[v].type == 'proto') {
                 prodData[v].type = 'protoOwn';
                 newRec.me = 'свой';
-            } 
+            }
         } else {
             if (prodData[v].type == 'proto') {
                 newRec.me = 'корп';
-            }            
+            }
         }
         //console.log("Data for " + v + to_json(newRec));
         var objCat = prodData[v].cat || 'Other';
@@ -116,13 +137,19 @@ function createCategories() {
         cat[objCat].push(newRec);
     };
     //      console.log(to_json(cat));
+    var subcat = {};
     for (var v in cat) {
-        var o = { name: v, open: false, data: cat[v] };
-        /*
-                if(v == "Промышленные роботы"){
-                    o.open = true;
-                }
-        */
+        var o = { name: v, data: cat[v] };
+        var newCat = subcatToCategory(v);
+        if (!subcat[newCat]) {
+            subcat[newCat] = [];
+        }
+        subcat[newCat].push(o);
+
+    };
+    for (var v in subcat) {
+        //subcat[v].sort();
+        var o = { name: v, data: subcat[v] };
         categories.push(o);
 
     };
