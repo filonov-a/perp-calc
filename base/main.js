@@ -2,6 +2,7 @@
 
 //console.log(to_json(price));
 //console.log(to_json(prodData));
+var lastCalculatedRowId;
 function recalcTotal() {
     var table = $$('detailTable');
     var total = {};
@@ -33,7 +34,6 @@ function recalcTotal() {
 }
 function recalcDetail() {
     var itemName = $$('itemName').getValue();
-
     var table = $$('detailTable');
     table.clearAll();
     var baseItemMe = parseInt($$('me').getValue(), 10);
@@ -50,6 +50,11 @@ function recalcDetail() {
             }
         }
     );
+    var priceTable = $$('catTable');
+
+    var tableItem = priceTable.getItem(lastCalculatedRowId);
+    tableItem.cost = d[d.length -1].cost;
+    priceTable.updateItem(lastCalculatedRowId, tableItem);
     table.refresh();
 }
 var priceData = [];
@@ -202,14 +207,14 @@ function initUI() {
         view: "treetable",
         //autowidth: true,
         autoheight: true,
-
+        id: "catTable",
         columns: [
             {
                 id: "name", header: "Категория", width: 450,
                 template: "{common.treetable()} #name#"
             },
             { id: "tier", header: "Уровень", width: 90 },
-            { id: "cost", header: "Стоимость производства", width: 90 },
+            { id: "cost", header: "Стоимость", width: 120 },
             { id: "me", header: "Эфф", width: 80 },
             { id: "num", header: "Партия", width: 100 },
             { id: "time", header: "Время изготовления", width: 120 },
@@ -218,13 +223,11 @@ function initUI() {
         on: {
             onItemClick: function (id, e, node) {
                 var v = this.getItem(id.row);
-                //if (v.cost) {
+                lastCalculatedRowId = id.row;
                 webix.message(v.name);
-                //console.log(to_json(v));
                 $$('itemName').setValue(v.name);
                 recalcDetail();
                 $$('tabView').setValue('detailView');
-                //}
             },
         }
     };

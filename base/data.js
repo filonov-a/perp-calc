@@ -72,7 +72,6 @@ function updatePrices() {
     productivity['protoOwn'] = productivity['proto'];
 
     for (v in price) {
-        // console.log("Price for " + v + ':' + price[v]);
         priceData.push({ name: v, price: price[v] });
     }
 }
@@ -82,7 +81,6 @@ function editPrices() {
         function (row) {
             var v = table.getItem(row);
             price[v.name] = parseInt(v.price, 10);
-            //console.log(to_json(v));
         }
     );
     updatePrices();
@@ -104,16 +102,12 @@ function createCategories() {
         if (prodData[v].type == 'proto' && prodData[v].tier != 'П') {
             continue;
         }
-        if (prodData[v].type == 'base' ) {
-            prodData[v].cost =0;
-        }        
         if (ownCT[v]) {
-            prodData[v].cost = ownCT[v].cost || 0;
             prodData[v].me = ownCT[v].me || 0;
         }
         var newRec = {
             name: v,
-            cost: prodData[v].cost,
+            cost: '-',
             num: prodData[v].num,
             me: prodData[v].me,
             tier: prodData[v].tier,
@@ -155,14 +149,16 @@ function createCategories() {
     };
     categories.sort();
 }
-createCategories();
+
 
 function to_json(s) {
     return JSON.stringify(s, null, 2);
 }
 function to_number(x) {
-    var n = Math.floor(x);
+    var n = Math.ceil(x);
     return n.toFixed(0).replace(/./g, function (c, i, a) {
         return i && c !== "." && ((a.length - i) % 3 === 0) ? ' ' + c : c;
     });
 }
+
+createCategories();
