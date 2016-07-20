@@ -71,7 +71,7 @@ sub parseDefaults(){
 		$meta{$key}->{type} = 'proto';
 	    }
 	}
-	if($cat =~ /Материалы/){
+	if($cat =~ /атериалы/){
 	    $meta{$key}->{type} = 'base';
 	}
 	if($cat =~ /патрон/){
