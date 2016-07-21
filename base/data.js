@@ -15,6 +15,8 @@ function subcatToCategory(subcat) {
     }
     if (subcat.indexOf("патрон") > 0
         || subcat.indexOf("ячейк") > 0
+        || subcat.indexOf("болванк") > 0
+        || subcat.indexOf("ракет") > 0
         || subcat.indexOf("кассет") > 0
     ) {
         return "Расходники";
