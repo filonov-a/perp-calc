@@ -71,10 +71,10 @@ function getMaterials(name, quantity, baseItemMe) {
     //console.log("Eff " + name + " " + me + ' : ' + k + " q:",quantity);
     for (v in materials) {
         // console.log("Found " + v + ':' + materials[v]);
-        var matValue = Math.ceil(materials[v] * quantity * (( v == 1)?1 : k));
+        var matValue = Math.ceil(materials[v] * quantity * (( materials[v] === 1)?1 : k));
         var obj = {
             name: v,
-            basevalue: Math.ceil(materials[v] * quantity),
+            basevalue: Math.floor(materials[v] * quantity),
             value: matValue,
             open: false,
             'me': getProductivityByName(v, 0)
