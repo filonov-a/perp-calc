@@ -83,7 +83,7 @@ sub parseDefaults(){
 	}
 	if($cat =~ /(патрон|болванк|ракет|кассет)/){
 	    $meta{$key}->{num} = 1000;
-	    if($cat =~ /редн/){
+	    if($cat =~ /(редн|кассет)/){
 		$meta{$key}->{time} = 800;
 	    } else {
 		$meta{$key}->{time} = 400;
