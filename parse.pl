@@ -64,7 +64,7 @@ sub parseDefaults(){
 	$names{$key} = $n;
 	$cat = $categories{$cat} || $cat;
 	$meta{$key}->{cat}  = $cat;
-	$meta{$key}->{img}  = $comps;
+	#$meta{$key}->{img}  = $comps;
 	if ( /tier=\$(\w+)/){
 	    my $tier = $trans->{$1} || $1;
 	    $meta{$key}->{tier}  = $tier;
@@ -72,16 +72,51 @@ sub parseDefaults(){
 		$meta{$key}->{type} = 'proto';
 	    }
 	}
+#Base build time is 800 seconds for ammo, 
+#2000/4000/8000 seconds for modules,
+# 12000 seconds for light robots, 
+#16000 seconds for assault robots,
+# 32000 seconds for mechs and 40000 seconds for heavy mechs.
 	if($cat =~ /атериалы/){
 	    $meta{$key}->{type} = 'base';
+	    $meta{$key}->{time} = 0;
 	}
 	if($cat =~ /(патрон|болванк|ракет|кассет)/){
 	    $meta{$key}->{num} = 1000;
+	    if($cat =~ /редн/){
+		$meta{$key}->{time} = 800;
+	    } else {
+		$meta{$key}->{time} = 400;
+	    }
 	}
 	if($cat =~ /энергоячейки/){
 	    $meta{$key}->{num} = 1250;
+	    if($cat =~ /редн/){
+		$meta{$key}->{time} = 800;
+	    } else {
+		$meta{$key}->{time} = 400;
+	    }
 	}
-    }    
+
+	if($cat =~ /Легкие робот/){
+	    $meta{$key}->{time} = 12000;
+	}
+	if($cat =~ /Штурмовые робот/){
+	    $meta{$key}->{time} = 16000;
+	}
+	if($cat =~ /^Мехи/){
+	    $meta{$key}->{time} = 32000;
+	}
+	if($cat =~ /^Тяжелые мехи/){
+	    $meta{$key}->{time} = 32000;
+	}     
+	if($cat =~ /^Тяжелые глай/){
+	    $meta{$key}->{time} = 32000;
+	}    	if (!exists $meta{$key}->{time} && $meta{$key}->{tier} =~ /^.[14]/ ){
+	    my $level = $1;
+	    $meta{$key}->{time} = 2000*$level;
+	}
+    }
     close(F);
 }
 sub parseTranslation(){
