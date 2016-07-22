@@ -28,7 +28,7 @@ sub parseEntities(){
 	#$h{$key} = $comps;
 	my @data = split /\|c\w+=/,$comps;
 	my $name =  $names{$key};
-	next if ($meta{$key}->{tier} =~ /[0\-]/);
+	#next if ($meta{$key}->{tier} =~ /[0\-]/);
 	#next if ($meta{$key}->{type} eq 'proto' && $meta{$key}->{tier} ne 'П');
 	next if ($meta{$key}->{cat} eq "Изотопы");
 	next if ($name =~ /^(Platinum|Emerald|Ruby|Рубин)/);
@@ -64,6 +64,7 @@ sub parseDefaults(){
 	$names{$key} = $n;
 	$cat = $categories{$cat} || $cat;
 	$meta{$key}->{cat}  = $cat;
+	$meta{$key}->{img}  = $comps;
 	if ( /tier=\$(\w+)/){
 	    my $tier = $trans->{$1} || $1;
 	    $meta{$key}->{tier}  = $tier;
@@ -74,7 +75,7 @@ sub parseDefaults(){
 	if($cat =~ /атериалы/){
 	    $meta{$key}->{type} = 'base';
 	}
-	if($cat =~ /патрон/){
+	if($cat =~ /(патрон|болванк|ракет|кассет)/){
 	    $meta{$key}->{num} = 1000;
 	}
 	if($cat =~ /энергоячейки/){
